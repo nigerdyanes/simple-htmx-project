@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
+    <script src="https://unpkg.com/mustache@latest"></script>
+  </head>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .main {
+      display: flex;
+    }
+  </style>
+  <body>
+    <h1>Hello HTMX!!</h1>
+    <div hx-ext="client-side-templates">
+      <button
+        hx-get="https://jsonplaceholder.typicode.com/users"
+        hx-swap="innerHTML"
+        hx-target="#content-users"
+        mustache-array-template="users"
+      >
+        List users
+      </button>
+      <div class="main">
+        <div id="content-users"></div>
+        <div id="content-user"></div>
+      </div>
+
+      <template id="users">
+        <h3>List users</h3>
+        {{#data}}
+        <p
+          hx-get="https://jsonplaceholder.typicode.com/users/{{{ id }}}"
+          hx-trigger="click"
+          hx-swap="innerHTML"
+          hx-target="#content-user"
+          mustache-template="user"
+        >
+          {{name}} at {{email}} is with {{company.name}}
+        </p>
+        {{/data}}
+      </template>
+      <template id="user">
+        <h3>Details</h3>
+        <p>{{id}} {{username}} at {{email}} is with {{company.name}}</p>
+      </template>
+    </div>
+  </body>
+</html>
